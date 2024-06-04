@@ -1,0 +1,201 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 445px;
+}
+
+.uploadContainer {
+    width: 600px;
+    max-width: 50vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin-top: 50px;
+    border-radius: 15px;
+    border: 2px solid lightgray;
+}
+
+.uploadForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    background-color: #ffffff;
+    padding: 20px;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+}
+
+.mealCategory{
+    width: 300px;
+    height: 40px;
+    border: 1px solid #C4C4C4;
+    box-sizing: border-box;
+    border-radius: 10px;
+    /* padding: 12px 13px; */
+    margin: 5px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 16px;
+    text-align: center;
+}
+
+.uploadForm input{
+    font-size: 15px;
+    width: 480px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+}
+
+.addMenu{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    /* justify-content: center; */
+}
+
+.addMenu input{
+    font-size: 15px;
+    width: 198px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.addMenu button{
+    color: #ffffff;
+    font-size: 20px;
+    font-weight:normal;
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 12px;
+    background-color: #90dd90;
+}
+
+.addMenu button:hover{
+    background-color: #86ce86;
+}
+
+.menuList{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;    
+}
+
+.menuList ul{
+    padding: 20px 40px;
+    width: 400px;
+    text-align: left;
+    border: 1px solid lightgray;
+    min-height: 55px;
+    border-radius: 8px;
+    list-style:none;
+
+    width: 500px;
+    padding: 10px;
+    font-size: 15px;
+    font-weight: 550;
+    box-sizing: border-box;
+}
+
+.menuList h4{
+    margin: 10px;
+}
+
+.menuItem{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.menuItem button{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    border: 0px;
+    border-radius: 15px;
+    margin: 5px 15px;
+    padding: 3px 8px;
+    background-color: #ff8686;
+}
+.menuItem button:hover{
+    background-color: #fd5353;
+}
+
+.imagePreview {
+    display: none;
+    width: 100%;
+    max-width: 300px;
+    margin-top: 10px;
+}
+
+.content{
+    width: 500px;
+    height: 100px;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: 550;
+    box-sizing: border-box;
+    resize: none;
+    border: 1px solid lightgray;
+    border-radius: 8px;
+}
+
+.uploadBtn {
+    color: white;
+    width: 298px;
+    border: 0px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    padding: 12px 13px;
+    margin: 5px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 16px;
+    text-align: center;
+    background-color: #90dd90;
+}
+
+.uploadBtn:hover {
+    background-color: #86ce86;
+}
+
+@media (max-width: 800px) {
+    .page{
+        margin-left: 0px;
+    }
+
+    .uploadContainer {
+        width: 80vw;
+        max-width: 80vw;
+    }   
+}

@@ -1,0 +1,61 @@
+.page{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 445px;
+}
+
+.foodRecomenderBox{
+    width: 840px;
+    height: 560px;
+    margin: 100px 0px 30px 0px;
+    
+    /* position: absolute;
+    top: 200px; */
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid lightgray;
+    border-radius: 30px;
+}
+
+.recomendContent{
+    /* display: none; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.recomendBtn{
+    color: white;
+    width: 298px;
+    border: 0px;
+    border-radius: 10px;
+    padding: 12px 13px;
+    margin: 5px;
+    font-family: 'Roboto';
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 16px;
+    text-align: center;
+    background-color: #90dd90;
+}
+
+.recomendBtn:hover{
+    background-color: #66b466;
+}
+
+@media (max-width: 800px){
+    .page{
+        margin-left: 0px;
+        margin-bottom: 80px;
+        flex-direction: column;
+    }
+    .food-recomender-container{
+        margin: 0px;
+        width: 8-vw;
+    }
+}

@@ -1,0 +1,94 @@
+.side-bar{
+    height: 100vh;
+    width: 25%;
+    border: 0px 1px 0px 0px;
+    background-color: #fdfdfd;
+    border-right: 1px solid gray;
+}
+
+.logo{
+    text-align: center;
+    margin: 20px;
+}
+
+.logo-title{
+    font-family: 'Pacifico', cursive;
+    font-weight: 700;
+    font-size: 30px;
+    text-decoration: none; /*추후 링크시 필요 */
+}
+
+.logo-title:hover {
+    color: blue;
+}
+
+.side-bar-options{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    margin: 100px 0px 0px 20px;
+}
+
+.side-bar-option{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 10px;
+    width: 90%;
+    height: 50px;
+}
+
+
+.side-bar-option:hover {
+    background-color: #eeeeee;
+}
+
+.option-icon{
+    width: 30px;
+    height: 30px;
+    padding-left: 20px;
+}
+
+.option-title{
+    padding-left: 20px;
+    font-weight: 700;
+    font-size: 20;
+    font-family: initial;
+}
+
+.profile {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: absolute; /*예쁘게 위치시키실 수 있는 분 수정 바랍니다..!*/
+    left: 30px;
+    bottom: 30px;
+  }
+  
+  .profile-image {
+    width: 45px;
+    height: 45px;
+    background-color: green;
+    border-radius: 100%;
+    margin-right: 12px;
+    
+  }
+  
+  .profile-name {
+    font-family: initial;
+    font-size: 18px;
+    font-weight: 500;
+    color: #101010;
+    line-height: 24.2px;
+  }
+
+@media (max-width: 800px) {
+    .side-bar {
+        display: none;
+    }
+    .profile{
+        border: 1px solid red;
+    }
+}

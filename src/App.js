@@ -1,12 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Route, Routes, useFetcher } from "react-router-dom";
-import SideBar from "./components/SideBar";
+import Router from "./routes";
 
-function App() {
+const App = () => {
   return (
-    <div className="app">
-      <SideBar/>
-    </div>
+    <Router/>
   );
 }
 
