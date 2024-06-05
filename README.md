@@ -13,3 +13,28 @@
 ## Commit mesage 약속
 - Feat : 새로운 파일 추가
 - Fix : 코드 수정
+
+## 사용법
+- npm i //종속성 설치
+- npm start //로컬호스트로 프로젝트 로드
+
+## git 기본 문법
+- pull
+  생성 :
+    git clone https://github.com/choc5/Dietwith-Front.git
+  로컬 업데이트 :
+    git init
+    git remote add origin https://github.com/choc5/Dietwith-Front.git
+    git pull origin develop
+  
+- push
+  초기세팅 :
+    git git branch
+    git branch develop
+    git checkout develop
+  원격 업데이트 :
+    git add *
+    git commit -m "커밋메시지"
+    git push origin develop
+  
+
