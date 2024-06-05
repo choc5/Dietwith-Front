@@ -1,0 +1,27 @@
+.page{
+    display: flex;
+    flex-direction: column;
+    margin-left: 445px;
+}
+
+.feeds{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.replyButton {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    /* 추가적인 스타일 */
+  }
+
+@media (max-width: 800px) {
+    .page{
+        margin-left: 0px;
+        margin-bottom: 80px;
+        flex-direction: column;
+    }
+}

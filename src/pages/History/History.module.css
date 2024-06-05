@@ -1,0 +1,31 @@
+.page{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 445px;
+}
+
+.title{
+    width: 300px;
+    text-align: center;
+    font-style: 'Roboto';
+    font-weight: 500;
+    font-size: 25px;
+    margin: 25px;
+    padding: 10px;
+    border: 1px solid #90dd90;
+    background-color: #c7ffc7;
+    border-radius: 12px;
+}
+
+.feeds{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media (max-width: 800px){
+    .page{
+        margin-left: 0px;
+    }
+}
