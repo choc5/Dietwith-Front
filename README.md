@@ -6,7 +6,7 @@
 - 서로에게 피드백하며 지식 공유
 - 나에게 맞는 식단 Ai 추천 서비스
 
-#개발
+# 개발
 ## 유의
 - develop에 push 후 merge (main에 직접 push X)
 
