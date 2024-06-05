@@ -23,6 +23,8 @@
   .currentFeedImage{
     width: 400px;
     height: 400px;
+    border: 1px solid lightgray;
+    border-radius: 10px;
   }
 
   .currentFeedContent{
@@ -82,11 +84,14 @@
   }
 
   .addCommentSection{
+    background-color: #ffffff;
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 5px;
     margin: 10px;
+    padding-top: 10px;
+    border-top: 2px solid lightgrey;
   }
 
   .addCommentSection input{
@@ -94,6 +99,7 @@
     border: 2px solid lightgray;
     height: 25px;
     padding-left: 10px;
+    width: 200px;
   }
 
   .addCommentSection button{

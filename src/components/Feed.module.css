@@ -94,6 +94,10 @@
   border-radius: 20px;
 }
 
+.feedImg img{
+  width: 100%;
+  height: 100%;
+}
 @media (max-width: 800px) {
   .feedCase{
     max-width: 80vw;

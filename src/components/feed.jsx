@@ -2,6 +2,7 @@ import React from "react";
 import styles from './Feed.module.css';
 import Profile from "./Profile";
 
+
 export default function Feed({ feedData }) {
   const { feed_id, feed_date, feed_user, category, menuList, content, comments, imageSrc } = feedData;
 
