@@ -8,7 +8,7 @@
 # 개발
 
 ## 유의사항
-- develop에 push 후 merge (main에 직접 push X)
+- 본인 Brnach에 push 후 검토 뒤 merge (main에 직접 push X)
 
 ## Commit 메시지 약속
 - Feat : 새로운 파일 추가
@@ -21,16 +21,16 @@
 ## git 기본 문법
 ### pull
 - git clone https://github.com/choc5/Dietwith-Front.git //로컬 저장소에 프로젝트 생성
-- git init
-- git remote add origin https://github.com/choc5/Dietwith-Front.git
-- git pull origin develop //업데이트
+- git init //git 전용 로컬 저장소 생성
+- git remote add origin https://github.com/choc5/Dietwith-Front.git //git hub 리모트 권한 프로젝트에 부여
+- git pull origin <<본인 Branch 이름>> //업데이트, 오류 발생하면 에러 메시지 해석해서 대처한 뒤 다시 시도.
   
 ### push
 - git git branch 
-- git branch develop
-- git checkout develop //초기세팅
-- git add *
-- git commit -m "커밋메시지"
-- git push origin develop //업로드
+- git branch <<본인 Branch 이름>>
+- git checkout <<본인 Branch 이름>> //초기세팅
+- git add * //전부 반영할 거라는 뜻
+- git commit -m "커밋메시지" //커밋메시지 약속에 따라 간단히 작성
+- git push origin develop //업로드, 혹시 오류 발생하면 에러 메시지 해석해서 대처한 뒤 git add 부터 다시 진행.
   
 
