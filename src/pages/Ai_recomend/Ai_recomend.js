@@ -4,7 +4,7 @@ import axios from 'axios';
 import SideBar from "../../components/SideBar";
 import styles from './Ai_recomend.module.css';
 
-  
+
 const Ai_recomend = () => {
 
   const [foodName, setFoodName] = useState('');
@@ -12,11 +12,13 @@ const Ai_recomend = () => {
   const serviceKey = encodeURIComponent('sY/6WpLYFBJYlmLBQIfarvo08u5vmduk0U/hfPVCi9NWir3dc9Rg10flh1IxMPPABXO6+rkDSzU+50Qp7KS0Wg==');
   const baseUrl = `http://api.data.go.kr/openapi/tn_pubr_public_nutri_food_info_api?serviceKey=${serviceKey}&type=xml`;
 
+
+  // 식품 영양 open api에서 랜덤으로 추출.
   const fetchFood = async () => {
     try {
       const foods = []; // 빈 배열로 초기화
       while (foods.length < 30) {
-        const pageNo = Math.floor(Math.random() * 122) + 1; // 1부터 122까지의 랜덤 페이지 번호
+        const pageNo = Math.floor(Math.random() * 121) + 1; // 1부터 122까지의 랜덤 페이지 번호
         const response = await axios.get(`${baseUrl}&pageNo=${pageNo}&numOfRows=100`);
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(response.data, "text/xml");
