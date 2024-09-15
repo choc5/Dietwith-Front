@@ -49,6 +49,7 @@ const Home = () => {
         },
     ]);
     const [selectedFeed, setSelectedFeed] = useState(null);
+
     const handleUpdateComments = (feedId, updatedComments) => {
         setFeeds(feeds.map(feed => feed.feed_id === feedId ? { ...feed, comments: updatedComments } : feed));
     };
@@ -60,6 +61,7 @@ const Home = () => {
     const handleCloseModal = () => {
         setSelectedFeed(null);
     };
+
     return (
         <>
         <SideBar />

@@ -1,0 +1,4 @@
+;/*FB_PKG_DELIM*/
+
+__d("MWMessageListLoggingContext",["react","uuidv4"],(function(a,b,c,d,e,f,g){"use strict";var h,i=h||(h=d("react"));d=h;var j=d.createContext,k=d.useContext,l=d.useRef,m=j({current:""});function a(a){var b=a.children;a=a.flowInstanceId;a=l(a);return i.jsx(m.Provider,{value:a,children:b})}a.displayName=a.name+" [from "+f.id+"]";function b(){return k(m)}function e(){var a=k(m);(a.current===null||a.current==="")&&(a.current=c("uuidv4")());return a}g.MWMessageListLoggingContext=a;g.useFlowInstanceIdContext=b;g.useFlowInstanceId=e}),98);
+__d("getGroupThreadViewParams",[],(function(a,b,c,d,e,f){"use strict";function a(a,b){b=b==null?void 0:b.main.route.params;a=(a==null?void 0:a.entity_type)==="group"&&(a==null?void 0:a.section)==="CHATS";if(!a)return null;a=b==null?void 0:b.thread_id;b=b==null?void 0:b.idorvanity;if(a==null||b==null)return null;return typeof a==="string"&&typeof b==="string"?{groupId:b,threadKey:a}:null}f["default"]=a}),66);
