@@ -1,15 +1,30 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 import './Login.css';
 
 const Login = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const handleSubmit = (event) => {
-    event.preventDefault();
 
-  };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log('Logging in with:', { id, password }); // 로그 추가
+
+    try {
+        const response = await axios.post('http://localhost:3001/api/login', { id, password });
+        console.log('Response:', response.data); // 서버 응답 로그 추가
+        if (response.data.success) {
+            navigate("/Home");
+        } else {
+            alert(response.data.message);
+        }
+    } catch (error) {
+        console.error('Error during login:', error.response ? error.response.data : error.message);
+        alert('로그인 중 오류가 발생했습니다.1');
+    }
+};
 
   return (
     <div className='Login-page'>
@@ -40,7 +55,8 @@ const Login = () => {
                     </div>
                     <button className='login-button' 
                     type="submit" 
-                    onClick={() => {navigate("/Home");}}>로그인</button>
+                    //onClick={() => {navigate("/Home");}}
+                    >로그인</button>
                 </form>
             </div>
             <div className='Go-Join-Id_Pass'>

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import './Join.css';
 import { useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
 
 const Join = () => {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ const Join = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [type, setType] = useState('set');
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
 
     if(type == 'set'){
@@ -25,6 +25,26 @@ const Join = () => {
       return;
     }
 
+    try {
+      const response = await axios.post('http://localhost:3001/api/register', {
+        id,
+        password,
+        name,
+        email,
+        type,
+      });
+
+      if (response.data.success) {
+        alert(response.data.message);
+        navigate("/"); // 회원가입 후 로그인 페이지로 이동
+      } else {
+        alert(response.data.message);
+      }
+    } catch (error) {
+      console.error('Error during registration:', error);
+      alert('회원가입 중 오류가 발생했습니다.1');
+    }
+    
 
   };
 
@@ -95,10 +115,10 @@ const Join = () => {
         <h4>목표 설정    </h4>
         <select className='select' value={type} onChange={(event) => setType(event.target.value)}>
           <option value="set">목표 설정</option>
-          <option value="set-a">다이어트</option>
-          <option value="set-b">식단 관리</option>
-          <option value="set-c">식습관 개선</option>
-          <option value="set-d">기타</option>
+          <option value="다이어트">다이어트</option>
+          <option value="식단 관리">식단 관리</option>
+          <option value="식습관">식습관 개선</option>
+          <option value="기타">기타</option>
         </select></div>
         <div>
         <button className='button' type="submit">회원가입</button>

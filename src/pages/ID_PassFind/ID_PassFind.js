@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './ID_PassFind.css';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const ID_PassFind = () => {
   const navigate = useNavigate();
@@ -8,10 +9,25 @@ const ID_PassFind = () => {
   const [type, setType] = useState('id'); // 'id' 또는 'pw'
   const [email, setEmail] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // 아이디/비밀번호 찾기 로직을 작성합니다. (예: API 호출, 데이터베이스 확인 등)
+    try {
+      const response = await axios.post('http://localhost:3001/api/find', {
+        type,
+        email,
+      });
+
+      if (response.data.success) {
+        alert(response.data.message);
+        navigate("/"); // 성공 후 홈으로 이동
+      } else {
+        alert(response.data.message);
+      }
+    } catch (error) {
+      console.error('Error during ID/password find:', error);
+      alert('아이디/비밀번호 찾기 중 오류가 발생했습니다.');
+    }
   };
 
   return (
@@ -27,8 +43,8 @@ const ID_PassFind = () => {
 
       <form onSubmit={handleSubmit}>
         <select className='select' value={type} onChange={(event) => setType(event.target.value)}>
-          <option value="id">아이디 찾기</option>
-          <option value="pw">비밀번호 찾기</option>
+          <option value='id'>아이디 찾기</option>
+          <option value='pw'>비밀번호 찾기</option>
         </select>
         <div >
         <h4>이메일을 입력해 주세요</h4>
