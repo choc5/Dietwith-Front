@@ -1,96 +1,94 @@
-﻿.Join-container{
+﻿.Join-container {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 20px; /* 여백 추가 */
 }
 
-.BackBtn{
+.BackBtn {
     position: absolute;
     top: 30px;
     left: 30px;
     width: 40px;
     height: 40px;
+    transition: all 0.3s ease; /* 부드러운 크기 변화 */
 }
 
-.BackBtn:hover{
+.BackBtn:hover {
     width: 44px;
     height: 44px;
 }
 
-h1{
-    font-family: 'Roboto';
-    font-style: normal;
+h1 {
+    font-family: 'Roboto', sans-serif;
     font-weight: 800;
+    font-size: 24px; /* 제목 크기 조정 */
+    margin-bottom: 20px; /* 제목과 다른 요소 간의 간격 */
 }
-h4{
-    font-family: 'Roboto';
-    font-style: normal;
+
+h4 {
+    font-family: 'Roboto', sans-serif;
     font-weight: 600;
-}
-.select{
-    width: 300px;
-    border: 1px solid #C4C4C4;
-    box-sizing: border-box;
-    border-radius: 10px;
-    /* padding: 12px 13px; */
-    margin: 5px;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 15px;
-    line-height: 16px;
-    text-align: center;
+    font-size: 18px; /* 소제목 크기 조정 */
+    margin: 10px 0; /* 제목 간의 간격 */
 }
 
-.select:focus{
-    border: 1px solid #d5f5e5;
-    box-sizing: border-box;
-    border-radius: 10px;
-    outline: 3px solid #e4fff5;
-    border-radius: 10px;
-}
-.box{
-    width: 300px;
-    border: 1px solid #C4C4C4;
-    box-sizing: border-box;
-    border-radius: 10px;
-    padding: 12px 13px;
-    margin: 5px;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 15px;
-    line-height: 16px;
-    text-align: center;
+/* 공통 스타일 클래스 */
+input.box,
+select.select,
+.button {
+    width: 300px; /* 입력 필드 및 버튼 너비 */
+    border: 1px solid #C4C4C4; /* 테두리 색상 */
+    box-sizing: border-box; /* 박스 모델 설정 */
+    border-radius: 10px; /* 모서리 둥글게 */
+    padding: 10px; /* 내부 여백 조정 */
+    margin: 10px 0; /* 수직 여백만 설정 */
+    font-family: 'Roboto', sans-serif; /* 폰트 설정 */
+    font-weight: 400; /* 폰트 두께 */
+    font-size: 15px; /* 폰트 크기 */
+    line-height: 18px; /* 줄 높이 조정 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    transition: border 0.3s ease, outline 0.3s ease; /* 부드러운 효과 */
 }
 
-.box:focus{
-    border: 1px solid #d5f5e5;
-    box-sizing: border-box;
-    border-radius: 10px;
-    outline: 3px solid #e4fff5;
-    border-radius: 10px;
+input.box:focus,
+select.select:focus,
+.button:focus {
+    border: 1px solid #d5f5e5; /* 포커스 시 테두리 색상 */
+    outline: 3px solid #e4fff5; /* 포커스 시 아웃라인 */
 }
 
-.button{
-    width: 300px;
-    border: 1px solid #C4C4C4;
-    box-sizing: border-box;
-    border-radius: 10px;
-    padding: 12px 13px;
-    margin: 5px;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 15px;
-    line-height: 16px;
-    text-align: center;
+.button {
+    background-color: #4CAF50; /* 버튼 배경색 */
+    color: white; /* 버튼 텍스트 색상 */
+    cursor: pointer; /* 커서 포인터로 변경 */
 }
 
-.button:focus{
-    border: 1px solid #d5f5e5;
-    box-sizing: border-box;
-    border-radius: 10px;
-    outline: 3px solid #e4fff5;
-    border-radius: 10px;
+.button:hover {
+    background-color: #45a049; /* 버튼 호버 색상 */
+}
+
+/* 중복 확인 버튼 스타일 */
+.check-duplicate-button {
+    width: 120px; /* 버튼 너비를 작게 조정 */
+    height: 40px; /* 버튼 높이 조정 */
+    border: 1px solid #C4C4C4; /* 테두리 색상 */
+    border-radius: 10px; /* 모서리 둥글게 */
+    background-color: #4CAF50; /* 버튼 배경색 */
+    color: white; /* 버튼 텍스트 색상 */
+    cursor: pointer; /* 커서 포인터로 변경 */
+    margin-left: 10px; /* 입력 필드와 버튼 간의 간격 */
+    transition: background-color 0.3s ease; /* 배경 색상 변화에 부드러운 효과 */
+}
+
+.check-duplicate-button:hover {
+    background-color: #45a049; /* 호버 시 버튼 색상 변화 */
+}
+
+/* 버튼을 포함한 부모 div 스타일 */
+.duplicate-check-container {
+    display: flex; /* flexbox를 사용하여 중앙 정렬 */
+    justify-content: flex-start; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    margin: 10px 0; /* 버튼과 다른 요소 간의 여백 */
 }

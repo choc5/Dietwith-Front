@@ -69,8 +69,11 @@ export default function SideBar() {
             {isMenuVisible && (
                 <div className="user-menu">
                     <div className="user-menu-option" id="option3">문제 신고</div>
-                    <div className="user-menu-option" id="option2">내 정보</div>
-                    <div className="user-menu-option" id="option1" onClick={() => {navigate('/');}}>로그아웃</div>
+                    <div className="user-menu-option" id="option2" onClick={() =>
+                        {navigate("/My_information");}}>내 정보</div>
+                    <div className="user-menu-option" id="option1" onClick={() => {
+                        localStorage.removeItem('userId');
+                        navigate('/');}}>로그아웃</div>
                 </div>
             )}
             <div className="profile-container" onClick={userMenu}>

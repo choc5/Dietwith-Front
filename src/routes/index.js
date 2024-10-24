@@ -8,7 +8,7 @@ import Friends from "../pages/Friends";
 import Login from "../pages/Login";
 import Join from "../pages/Join";
 import ID_PassFind from "../pages/ID_PassFind"
-
+import My_information from "../pages/My_information"
 const Router = () => {
     useEffect(() => {}, []);
     return (
@@ -17,7 +17,7 @@ const Router = () => {
                 <Route path="/" element={<Login/>} />
                 <Route path="/Join" element={<Join/>}/>
                 <Route path="/ID_passFind" element={<ID_PassFind/>}/>
-                
+                <Route path="/My_information" element={<My_information/>}/>
                 <Route path="/Home" element={<Home/>} />
                 <Route path="/Upload" element={<Upload/>}/>
                 <Route path="/History" element={<History/>}/>

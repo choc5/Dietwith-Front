@@ -2,45 +2,102 @@ import React from 'react';
 import styles from './Modal.module.css';
 // import Feed from './Feed';
 import { useEffect, useState } from 'react';
-
+import axios from 'axios';
 
 const Modal = ({ feed, onClose, onUpdateComments }) => {
     const [comment, setComment] = useState('');
-    const [comments, setComments] = useState(feed.comments || []);
+    const [comments, setComments] = useState([]);
+    const [userId, setUserId] = useState(null);
 
-    const handleAddComment = () => {
-        const newComment = { user: '올라운더', comment   : comment }; //임시 이름
-        const updatedComments = [...comments, newComment];
-        setComments(updatedComments);
-        setComment(''); // 입력 초기화
-        onUpdateComments(feed.feed_id, updatedComments); // 부모 컴포넌트에 업데이트된 댓글 목록 전달
+    useEffect(() => {
+        // 현재 사용자 ID 가져오기 (로그인한 사용자)
+        const fetchUserId = async () => {
+            try {
+                const response = await axios.get('http://localhost:3001/api/current_user', { withCredentials: true });
+                if (response.data.success) {
+                    setUserId(response.data.userId);
+                }
+            } catch (error) {
+                console.error('사용자 정보 가져오기 오류:', error);
+            }
+        };
+
+        // 댓글 가져오기
+        const fetchComments = async () => {
+            try {
+                const response = await axios.get(`http://localhost:3001/api/comments/${feed.feed_id}`, { withCredentials: true });
+                if (response.data.success) {
+                    setComments(response.data.comments);
+                }
+            } catch (error) {
+                console.error('댓글 가져오기 오류:', error);
+            }
+        };
+
+        fetchUserId();
+        fetchComments(); 
+    }, [feed]);
+
+    const handleAddComment = async () => {
+        if (!comment.trim()) {
+            alert('댓글을 입력하세요.');
+            return;
+        }
+
+        const imageUrl = ''; // 필요에 따라 이미지 URL을 설정
+
+        try {
+            const response = await axios.post('http://localhost:3001/api/comments', {
+                feedId: feed.feed_id,
+                comment: comment,
+                imageUrl: imageUrl // 추가된 이미지 URL
+            }, { withCredentials: true });
+
+            if (response.data.success) {
+                const newComment = { user: userId, comment, imgUrl: imageUrl }; // 이미지 URL 포함
+                const updatedComments = [...comments, newComment];
+                setComments(updatedComments);
+                setComment(''); // 입력 초기화
+                onUpdateComments(feed.feed_id, updatedComments);
+            } else {
+                console.error('댓글 추가 실패:', response.data.message);
+            }
+        } catch (error) {
+            console.error('오류 발생:', error);
+        }
     };
 
     return (
         <div className={styles.modalOverlay} onClick={onClose}>
             <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-                {/* <Feed feedData={{ ...feed, comments }} /> */}
                 <div className={styles.currentFeed}>
-                    <img src={feed.imageSrc} className={styles.currentFeedImage}></img>
+                    <img 
+                        src={feed.img_src ? `http://localhost:3001/${feed.img_src.replace(/\\/g, '/')}` : ''}
+                        className={styles.currentFeedImage} 
+                        
+                    />
                     <div className={styles.currentFeedContent}>
                         <h4>{feed.category}</h4>
                         <div className={styles.currentFeedMenuList}>
                             {feed.menuList.map((r, index) => (
-                            <li key={index} className={styles.currentFeedMenu}>{r.name} {r.calories}</li>
-                        ))}
+                                <li key={index} className={styles.currentFeedMenu}>{r.name} {r.calories} kcal</li>
+                            ))}
                         </div>
                     </div>
-
                 </div>
                 <div className={styles.commentsContainer}>
-                    <h4>댓글</h4>
-                    <ul className={styles.commentsList}>
-                        {comments.map((r, index) => (
-                            <div key={index} className={styles.feedComment}>
-                                {r.user} : {r.comment}
-                            </div>
-                        ))}
-                    </ul>
+                    <div className={styles.commentsContainer}>  
+                        <h4>댓글</h4>
+                        <ul className={styles.commentsList}>
+                            {comments.map((r, index) => (
+                                <div key={index} className={styles.feedComment}>
+                                    {r.user} : {r.comment}
+                                    {r.imgUrl && <img src={`http://localhost:3001/${r.imgUrl.replace(/\\/g, '/')}`} alt="댓글 이미지" className={styles.commentImage} />}
+                                    {r.feedImage && <img src={`http://localhost:3001/${r.feedImage.replace(/\\/g, '/')}`} alt="피드 이미지" className={styles.feedImage} />}
+                                </div>
+                            ))}
+                        </ul>
+                    </div>
                     <div className={styles.addCommentSection}>
                         <input
                             type="text"
@@ -56,7 +113,7 @@ const Modal = ({ feed, onClose, onUpdateComments }) => {
     );
 };
 
-export default Modal;   
+export default Modal;
 
 // const Modal = ({ feed, onClose }) => {
 //     const [comment, setComment] = useState('');

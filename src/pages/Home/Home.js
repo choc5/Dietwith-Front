@@ -1,58 +1,42 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import SideBar from "../../components/SideBar";
 import Feed from "../../components/Feed";
 import Modal from "../../components/Modal";
 import styles from './Home.module.css';
 
+
 const Home = () => {
-    const [feeds, setFeeds] = useState([
-        {
-            feed_id: 'user0987_000004',
-            feed_date: '2024/06/02',
-            feed_user: '우주',
-            category: '점심',
-            menuList: [{ name: '베이컨', calories: 200 }, {name: '계란', calories: 100}],
-            content: '많이 먹어야 하는데..',
-            comments: [{ user: '입긴편', comment: '부실하다.. 멸치 탈출하려면 탄수화물이 필요함.' }, { user: '올라운더', comment: '내 아침인줄' }],
-            imageSrc: "./breakfast.png",
-        },
-        {
-            feed_id: 'user4756_000204',
-            feed_date: '2024/05/30',
-            feed_user: '푸드파이터 물개',
-            category: '점심',
-            menuList: [{ name: '피자', calories: 1100 }, {name: '치킨', calories: 1800}, {name: '치즈볼', calories: 450}, {name: '콜라', calories: 294}],
-            content: '오늘은 요정도.',
-            comments: [{ user: '입긴편', comment: '언제 한 번 같이 식당 가시죠' }, { user: '우주', comment: '!!!!!!!' }],
-            imageSrc: "./pizza.png",
-        },
-        {
-            feed_id: 'user7777_000077',
-            feed_date: '2024/05/30',
-            feed_user: '관리하는 고양이',
-            category: '아침',
-            menuList: [{ name: '삶은 계란', calories: 90 }, {name: '아이스 아메리카노', calories:55}],
-            content: '',
-            comments: [{ user: '고양이좋아', comment: '꺄' }, { user: '푸드파이터 물개', comment: '엥? 이렇게 먹고 사람이 살아?' }],
-            imageSrc: "egg.png",
-        },
-        {
-            feed_id: 'user1987_001987',
-            feed_date: '2024/05/28',
-            feed_user: '힘찬 강아지',
-            category: '간식',
-            menuList: [{ name: '햄버거', calories: 620 }],
-            content: '우리 모두 잘먹읍시다! 파이팅!',
-            comments: [{ user: '우주', comment: '파이팅..' }],
-            imageSrc: "burger.png",
-        },
-    ]);
+    const [feeds, setFeeds] = useState([]);
     const [selectedFeed, setSelectedFeed] = useState(null);
 
-    const handleUpdateComments = (feedId, updatedComments) => {
-        setFeeds(feeds.map(feed => feed.feed_id === feedId ? { ...feed, comments: updatedComments } : feed));
+    // 피드 데이터를 가져오는 함수
+    const fetchFeeds = async () => {
+        try {
+            const response = await axios.get('http://localhost:3001/api/feed', { withCredentials: true });
+            console.log('피드 응답:', response.data);
+            if (response.data.success) {
+                setFeeds(response.data.feeds);
+            } else {
+                console.error('피드 가져오기 실패:', response.data.message);
+            }
+        } catch (error) {
+            if (error.response) {
+                console.error('서버 응답 오류:', error.response.data);
+            } else if (error.request) {
+                console.error('요청이 이루어졌으나 응답이 없음:', error.request);
+            } else {
+                console.error('오류 발생:', error.message);
+            }
+        }
     };
+
+    useEffect(() => {
+        fetchFeeds();
+        const intervalId = setInterval(fetchFeeds, 60 * 1000); 
+        return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 클리어
+    }, []);
 
     const handleOpenModal = (feed) => {
         setSelectedFeed(feed);
@@ -62,33 +46,34 @@ const Home = () => {
         setSelectedFeed(null);
     };
 
+    const handleUpdateComments = (feedId, updatedComments) => {
+        setFeeds(feeds.map(feed => feed.feed_id === feedId ? { ...feed, comments: updatedComments } : feed));
+    };
+
     return (
         <>
-        <SideBar />
-        <div className={styles.page}>           
-            <div className={styles.feeds}>
-                {feeds.map(feed => (
-                    <div key={feed.feed_id} onClick={() => handleOpenModal(feed)}>
-                        <Feed feedData={feed} />
-                    </div>
-                ))}
-                {selectedFeed && (
-                    <Modal
-                        feed={selectedFeed}
-                        onClose={handleCloseModal}
-                        onUpdateComments={handleUpdateComments}
-                    />
-                )}
+            <SideBar />
+            <div className={styles.page}>           
+                <div className={styles.feeds}>
+                    {feeds.map(feed => (
+                        <div key={feed.feed_id} onClick={() => handleOpenModal(feed)}>
+                            <Feed feedData={feed} />
+                        </div>
+                    ))}
+                    {selectedFeed && (
+                        <Modal
+                            feed={selectedFeed}
+                            onClose={handleCloseModal}
+                            onUpdateComments={handleUpdateComments}
+                        />
+                    )}
+                </div>
             </div>
-        </div>
         </>
     );
 };
 
 export default Home;
-
-
-
 // const Home = () => {
 //   const [selectedFeed, setSelectedFeed] = useState(null);
 

@@ -1,34 +1,34 @@
-.profile-presenter{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+.profile-presenter {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
 
-  }
-  
-  .profile-image {
-    width: 45px;
-    height: 45px;
-    border: 3px solid #90dd90;
-    border-radius: 100%;
-    margin-right: 12px;
-    background-color: #ffffff ;
-    
-  }
-  
+.profile-image {
+  width: 45px;
+  height: 45px;
+  border: 3px solid #90dd90;
+  border-radius: 50%;
+  margin-right: 120x;
+  background-color: #ffffff;
+  background-size: cover; /* 이미지 크기 조정 */
+  background-position: center; /* 이미지 중심 맞춤 */
+}
+
+.profile-name {
+  font-family: initial;
+  font-size: 18px;
+  font-weight: 500;
+  color: #101010;
+  line-height: 24.2px;
+}
+
+@media (max-width: 800px) {
   .profile-name {
-    font-family: initial;
-    font-size: 18px;
-    font-weight: 500;
-    color: #101010;
-    line-height: 24.2px;
+      display: none; /* 모바일에서 이름 숨기기 */
   }
-
-  @media (max-width: 800px) {
-    .profile-name{
-        display: none;
-    }
-    .profile-image {
-        margin-right: 0px;
-    }
+  .profile-image {
+      margin-right: 0px; /* 모바일에서 오른쪽 여백 제거 */
+  }
 }

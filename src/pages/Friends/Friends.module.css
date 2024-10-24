@@ -44,6 +44,16 @@ h4 {
     margin-left: 20px;
 }   
 
+.friendRecommendations button{
+    color: #ffffff;
+    font-weight:normal;
+    width: 100px;
+    height: 28px;
+    border-radius: 10px;
+    border: none;
+    background-color: #90dd90;
+  }
+
 .friendItem {
     display: flex;
     justify-content: space-between;

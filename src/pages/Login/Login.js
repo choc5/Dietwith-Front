@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import './Login.css';
 
+
 const Login = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
@@ -13,10 +14,11 @@ const Login = () => {
     console.log('Logging in with:', { id, password }); // 로그 추가
 
     try {
-        const response = await axios.post('http://localhost:3001/api/login', { id, password });
+        const response = await axios.post('http://localhost:3001/api/login', { id, password }, { withCredentials: true });
         console.log('Response:', response.data); // 서버 응답 로그 추가
         if (response.data.success) {
-            navigate("/Home");
+            //localStorage.setItem('userId', response.data.userId);
+            navigate("/Home",{ state: { userId: response.data.userId } });
         } else {
             alert(response.data.message);
         }

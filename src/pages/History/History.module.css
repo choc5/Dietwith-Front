@@ -24,8 +24,10 @@
     align-items: center;
 }
 
-@media (max-width: 800px){
+@media (max-width: 800px) {
     .page{
         margin-left: 0px;
+        margin-bottom: 80px;
+        flex-direction: column;
     }
 }

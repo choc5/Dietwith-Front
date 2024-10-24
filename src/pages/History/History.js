@@ -4,40 +4,36 @@ import SideBar from "../../components/SideBar";
 import Feed from "../../components/Feed";
 import styles from './History.module.css';
 import Modal from "../../components/Modal";
-
+import axios from "axios";
 const History = () => {
-    const [feeds, setFeeds] = useState([
-        {
-            feed_id: 'user1234_000021',
-            feed_date: '2024/06/01',
-            feed_user: '올라운더',
-            category: '아침',
-            menuList: [{ name: '삶은 계란', calories: 200 }, { name: '베이컨', calories: 150 }, {name: '보리차'}],
-            content: '오랜만에 제대로 된 아침!',
-            comments: [{ user: '입긴편', comment: '부실하다.. 탄수화물이 필요함.' }, { user: '입짧은편', comment: '푸짐하네!' }],
-            imageSrc: "./breakfast.png",
-        },
-        {
-            feed_id: 'user1234_000023',
-            feed_date: '2024/05/27',
-            feed_user: '올라운더',
-            category: '간식',
-            menuList: [{ name: '식혜'}, { name: '과자'}, {name: '구운계란'}],
-            content: '오랜만에 제대로 된 아침!',
-            comments: [],
-            imageSrc: "sikhye.png",
-        },
-        {
-            feed_id: 'user1234_000022',
-            feed_date: '2024/05/29',
-            feed_user: '올라운더',
-            category: '점심',
-            menuList: [{ name: '밥', calories: 340 }, { name: '차돌 된장찌개', calories: 560 }, {name: '계란말이', calories: 212}],
-            content: '제 점심입니다. 근육을 붙이려고 하는데 어떤식으로 먹어야할까요?',
-            comments: [{ user: '헬린이', comment: '단백질을 제대로 섭취하는 게 좋을 것 같음' }, { user: '운동싫어함', comment: '식단만 조절해도 살빠짐' }],
-            imageSrc: "image.jpg",
-        },
-    ]);
+    const [feeds, setFeeds] = useState([]);
+
+    // 사용자의 피드를 가져오는 함수
+    const fetchUserFeeds = async () => {
+        try {
+            const response = await axios.get('http://localhost:3001/api/history', { withCredentials: true });
+
+            if (response.data.success) {
+                console.log('피드 데이터:', response.data.feeds); 
+                setFeeds(response.data.feeds);
+            } else {
+                console.error('피드 가져오기 실패:', response.data.message);
+            }
+        } catch (error) {
+            if (error.response) {
+                console.error('서버 응답 오류:', error.response.data);
+            } else if (error.request) {
+                console.error('요청이 이루어졌으나 응답이 없음:', error.request);
+            } else {
+                console.error('오류 발생:', error.message);
+            }
+        }
+    };
+
+    useEffect(() => {
+        // 컴포넌트가 마운트될 때 사용자의 피드를 가져옵니다.
+        fetchUserFeeds();
+    }, []);
 
     const [selectedFeed, setSelectedFeed] = useState(null);
 
