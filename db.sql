@@ -13,7 +13,11 @@ CREATE TABLE Users (
     user_hate JSON,
     user_activity ENUM('얌전', '보통', '활발') NOT NULL
 );
-
+CREATE TABLE Profile (
+    user_id VARCHAR(20) NOT NULL PRIMARY KEY,
+    Profile_img_src VARCHAR(255),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+) ;
 
 CREATE TABLE User_sign (
     id VARCHAR(20) NOT NULL PRIMARY KEY,
@@ -49,6 +53,7 @@ CREATE TABLE Feeds (
     category ENUM('아침', '점심', '저녁', '간식') NOT NULL,
     content TEXT,
     img_src VARCHAR(255),
+    Profile_img_src VARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
@@ -85,7 +90,7 @@ select * from user_sign;
 
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '1234';
 FLUSH PRIVILEGES;
-*/
+
 INSERT INTO Users (user_id, user_name, user_gender, user_height, user_purpose, user_like, user_hate, user_activity) VALUES
 ('a1', 'a1', 'M', NULL, NULL, '[]', '[]','보통'),
 ('a2', 'a2', 'F', NULL, NULL, '[]', '[]', '보통');
@@ -98,4 +103,40 @@ select * from users;
 select * from user_sign;
 SELECT * FROM User_sign WHERE id = 'a2' AND pw = 'a';
 
+select * from feeds;
+SELECT * FROM Feed_menu;
+SELECT * FROM  Feed_comments ;
+SELECT feed_id, img_src FROM feeds;
+select * from follows;
+INSERT INTO follows (follower_id, followee_id) VALUES
+('a','a1'),
+('a','a2'),
+('a','a3'),
+('a2','a'),
+('a1','a2');
 
+DESCRIBE Profile;
+select * from  Profile;
+drop table if exists feeds;
+CREATE TABLE Feeds_tmp (
+    feed_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id VARCHAR(20) NOT NULL,
+    feed_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    category ENUM('아침', '점심', '저녁', '간식') NOT NULL,
+    content TEXT,
+    img_src VARCHAR(255),
+	Profile_img_src VARCHAR(255),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+select * from  feeds_tmp;
+update feeds
+set profile_img_src ='uploads\\1729570930696.png'
+where user_id ='a';
+
+INSERT INTO Feeds (user_id, feed_date, category, content, img_src, Profile_img_src)
+VALUES ('a1', NOW(), '저녁', '잘먹음', 'uploads/1729618528888.png', 'uploads/profile_image.png');
+
+INSERT INTO Feed_menu (menu_id, feed_id, menu_name, menu_calorie)
+VALUES (3, 3, '피자', '1100');
+*/
