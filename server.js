@@ -288,11 +288,16 @@ app.get('/api/feed', (req, res) => {
     
     const query = `
     SELECT feeds.*, feed_menu.menu_name, feed_menu.menu_calorie, Profile.Profile_img_src
-    FROM feeds 
-    JOIN feed_menu ON feeds.feed_id = feed_menu.feed_id 
-    JOIN Profile ON feeds.user_id = Profile.user_id  
-    ORDER BY feeds.feed_date DESC;`;
-
+    FROM Feeds
+    JOIN feed_menu ON Feeds.feed_id = feed_menu.feed_id
+    JOIN Profile ON Feeds.user_id = Profile.user_id
+    WHERE Feeds.user_id IN (
+        SELECT followee_id 
+        FROM Follows 
+        WHERE follower_id = ?
+    )
+    ORDER BY Feeds.feed_date DESC;
+    `;
     connection.query(query, [userId], (error, results) => {
         if (error) {
             console.error('피드 데이터 가져오기 오류:', error);
