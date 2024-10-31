@@ -48,6 +48,10 @@
     background-color: #66b466;
 }
 
+.response{
+    margin: 20px;
+}
+
 @media (max-width: 800px){
     .page{
         margin-left: 0px;
