@@ -9,13 +9,8 @@ const path = require('path');
 
 const app = express();
 const port = 3001;
+
 app.use(express.json());
-
-// CORS 설정
-
-
-
-// Middleware 설정
 app.use(bodyParser.json()); // JSON 파싱을 위한 미들웨어 설정
 app.use(bodyParser.urlencoded({ extended: true })); // URL 인코딩된 데이터 파싱
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -406,6 +401,43 @@ app.get('/api/current_user', (req, res) => {
         res.status(401).json({ success: false, message: '사용자가 로그인하지 않았습니다.' });
     }
 });
+// 특정 유저의 피드 가져오기 API
+app.get('/api/friends/id', (req, res) => {
+    const userId = req.query.userId; // URL 쿼리 파라미터에서 userId 가져오기
+    if (!userId) {
+        return res.status(400).json({ success: false, message: 'userId가 필요합니다.' });
+    }
+    
+    const query = `
+    SELECT feeds.*, feed_menu.menu_name, feed_menu.menu_calorie, Profile.Profile_img_src
+    FROM feeds 
+    JOIN feed_menu ON feeds.feed_id = feed_menu.feed_id 
+    JOIN Profile ON feeds.user_id = Profile.user_id
+    WHERE feeds.user_id = ?  
+    ORDER BY feeds.feed_date DESC;`;
+
+    connection.query(query, [userId], (error, results) => {
+        if (error) {
+            console.error('피드 데이터 가져오기 오류:', error);
+            return res.status(500).json({ success: false, message: '서버 오류' });
+        }
+
+        const feeds = results.map(row => ({
+            feed_id: row.feed_id,
+            feed_date: row.feed_date,
+            feed_user: row.user_id,
+            category: row.category,
+            menuList: [{ name: row.menu_name, calories: row.menu_calorie }],
+            content: row.content,
+            img_src: row.img_src,
+            profile_img_src: row.Profile_img_src, 
+            comments: []
+        }));
+
+        res.json({ success: true, feeds });
+    });
+});
+
 
 // 친구 목록 API
 app.get('/api/friends', (req, res) => {
@@ -415,24 +447,23 @@ app.get('/api/friends', (req, res) => {
         return res.status(401).json({ success: false, message: '로그인 세션이 만료되었습니다.' });
     }
 
-    const query = 'SELECT followee_id FROM Follows WHERE follower_id = ?';
+    const query = `
+        SELECT f.followee_id, u.user_name, p.Profile_img_src
+        FROM Follows f
+        JOIN Users u ON f.followee_id = u.user_id
+        LEFT JOIN Profile p ON u.user_id = p.user_id
+        WHERE f.follower_id = ?;
+    `;
+    
     connection.query(query, [userId], (error, results) => {
         if (error) {
             console.error('친구 목록 가져오기 오류:', error);
             return res.status(500).json({ success: false, message: '서버 오류' });
         }
-
-        const friendIds = results.map(friend => friend.followee_id);
-        
-        const userQuery = 'SELECT user_id, user_name FROM Users WHERE user_id IN (?)';
-        connection.query(userQuery, [friendIds], (error, friends) => {
-            if (error) {
-                return res.status(500).json({ success: false, message: '서버 오류' });
-            }
-            res.json({ success: true, friends });
-        });
+        res.json({ success: true, friends: results });
     });
 });
+
 // 친구 추가 API
 app.post('/api/friends/add', (req, res) => {
     const { followeeId } = req.body; // 추가할 친구의 ID
@@ -452,16 +483,33 @@ app.post('/api/friends/add', (req, res) => {
         res.json({ success: true, message: '친구 추가 성공' });
     });
 });
-
-// 친구 추천 API
-app.get('/api/recommendations', (req, res) => {
+// 친구 삭제 API
+app.delete('/api/friends/remove', (req, res) => {
+    const { followeeId } = req.body; // 삭제할 친구의 ID
     const userId = req.session.userId; // 세션에서 사용자 ID 가져오기
 
     if (!userId) {
         return res.status(401).json({ success: false, message: '로그인 세션이 만료되었습니다.' });
     }
 
-    // 현재 사용자의 친구 목록 가져오기
+    const query = 'DELETE FROM Follows WHERE follower_id = ? AND followee_id = ?';
+    
+    connection.query(query, [userId, followeeId], (error, results) => {
+        if (error) {
+            console.error('친구 삭제 오류:', error);
+            return res.status(500).json({ success: false, message: '서버 오류' });
+        }
+        res.json({ success: true, message: '친구 삭제 성공' });
+    });
+});
+// 친구 추천 API
+app.get('/api/recommendations', (req, res) => {
+    const userId = req.session.userId;
+
+    if (!userId) {
+        return res.status(401).json({ success: false, message: '로그인 세션이 만료되었습니다.' });
+    }
+
     const friendQuery = 'SELECT followee_id FROM Follows WHERE follower_id = ?';
     connection.query(friendQuery, [userId], (error, friends) => {
         if (error) {
@@ -471,47 +519,23 @@ app.get('/api/recommendations', (req, res) => {
 
         const friendIds = friends.map(friend => friend.followee_id);
 
-        // 현재 사용자의 type 가져오기
-        const userTypeQuery = 'SELECT type FROM User_sign WHERE user_id = ?';
-        connection.query(userTypeQuery, [userId], (error, results) => {
-            if (error || results.length === 0) {
-                console.error('사용자 타입 가져오기 오류:', error);
-                return res.status(500).json({ success: false, message: '서버 오류' });
-            }
-
-            const userType = results[0].type;
-
-            // 같은 type을 가진 사용자 추천 쿼리 (user_name 제외)
-            const recommendationQuery = `
-            SELECT us.user_id, u.user_name 
-            FROM User_sign us
-            JOIN Users u ON us.user_id = u.user_id
-            WHERE us.type = ? AND us.user_id NOT IN (?) AND us.user_id != ?
+        const recommendationQuery = `
+            SELECT u.user_id, u.user_name, p.Profile_img_src 
+            FROM Users u
+            LEFT JOIN Profile p ON u.user_id = p.user_id
+            WHERE u.user_id NOT IN (?) AND u.user_id != ?
             LIMIT 3;
         `;
 
-            // 친구 목록이 비어있을 경우
-            if (friendIds.length === 0) {
-                connection.query(recommendationQuery, [userType, '', userId], (error, recommendations) => {
-                    if (error) {
-                        console.error('추천 쿼리 오류:', error);
-                        return res.status(500).json({ success: false, message: '서버 오류' });
-                    }
-                    res.json({ success: true, recommendations });
-                });
-            } else {
-                connection.query(recommendationQuery, [userType, friendIds, userId], (error, recommendations) => {
-                    if (error) {
-                        console.error('추천 쿼리 오류:', error);
-                        return res.status(500).json({ success: false, message: '서버 오류' });
-                    }
-                    res.json({ success: true, recommendations });
-                });
+        connection.query(recommendationQuery, [friendIds, userId], (error, recommendations) => {
+            if (error) {
+                console.error('추천 쿼리 오류:', error);
+                return res.status(500).json({ success: false, message: '서버 오류' });
             }
+            res.json({ success: true, recommendations });
         });
     });
 });
-
 // 프로필 사진 업로드 API
 app.post('/api/profile/upload', upload.single('image'), (req, res) => {
     const userId = req.session.userId; // 세션에서 사용자 ID 가져오기
@@ -574,6 +598,147 @@ app.get('/api/profile', (req, res) => {
         }
     });
 });
+
+// 사용자 정보 가져오기 API
+app.get('/api/user', (req, res) => {
+    // 세션에서 사용자 ID 가져오기
+    const userId = req.session.userId; 
+    if (!userId) {
+        return res.status(401).json({ success: false, message: '로그인 세션이 만료되었습니다.' });
+    }
+
+    const query = 'SELECT user_name, user_gender, user_height, user_purpose, user_like, user_hate, user_activity FROM Users WHERE user_id = ?';
+    
+    connection.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error('사용자 정보 가져오기 오류:', err);
+            return res.status(500).json({ success: false, message: '서버 오류' });
+        }
+        if (results.length > 0) {
+            res.json({ success: true, user: results[0] });
+        } else {
+            res.status(404).json({ success: false, message: '사용자를 찾을 수 없습니다.' });
+        }
+    });
+});
+// ai 사용자 정보 가져오기 API
+app.get('/api/user/ai', (req, res) => {
+    const userId = req.session.userId; 
+    if (!userId) {
+        return res.status(401).json({ success: false, message: '로그인 세션이 만료되었습니다.' });
+    }
+
+    const query = `
+        SELECT u.user_name, u.user_gender, u.user_height, u.user_purpose, u.user_like, u.user_hate, u.user_activity, 
+               w.weight AS user_weight
+        FROM Users u
+        LEFT JOIN User_weight w ON u.user_id = w.user_id
+        WHERE u.user_id = ?
+        ORDER BY w.record_date DESC
+        LIMIT 1
+    `;
+
+    connection.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error('사용자 정보 가져오기 오류:', err);
+            return res.status(500).json({ success: false, message: '서버 오류' });
+        }
+        if (results.length > 0) {
+            res.json({ success: true, user: results[0] });
+        } else {
+            res.status(404).json({ success: false, message: '사용자를 찾을 수 없습니다.' });
+        }
+    });
+});
+
+// 사용자 정보 업데이트 API
+app.put('/api/user', (req, res) => {
+    // 세션에서 사용자 ID 가져오기
+    const userId = req.session.userId; 
+    if (!userId) {
+        return res.status(401).json({ success: false, message: '로그인 세션이 만료되었습니다.' });
+    }
+
+    const { user_gender, user_height, user_purpose, user_like, user_hate, user_activity } = req.body;
+
+    const updateQuery = `
+        UPDATE Users 
+        SET user_gender = ?, user_height = ?, user_purpose = ?, user_like = ?, user_hate = ?, user_activity = ? 
+        WHERE user_id = ?
+    `;
+
+    connection.query(updateQuery, [user_gender, user_height, user_purpose, JSON.stringify(user_like), JSON.stringify(user_hate), user_activity, userId], (err, result) => {
+        if (err) {
+            console.error('사용자 정보 업데이트 오류:', err);
+            return res.status(500).json({ success: false, message: '서버 오류' });
+        }
+        if (result.affectedRows > 0) {
+            return res.json({ success: true, message: '사용자 정보가 업데이트되었습니다.' });
+        } else {
+            return res.status(404).json({ success: false, message: '사용자를 찾을 수 없습니다.' });
+        }
+    });
+});
+
+// 사용자 체중 기록 가져오기 API
+app.get('/api/user/:userId/weights', (req, res) => {
+    const userId = req.params.userId;
+    if (!userId) {
+        return res.status(401).json({ success: false, message: '로그인 세션이 만료되었습니다.' });
+    }
+    const query = 'SELECT record_date, weight FROM User_weight WHERE user_id = ? ORDER BY record_date DESC';
+
+    connection.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error('체중 기록 가져오기 오류:', err);
+            return res.status(500).json({ success: false, message: '서버 오류' });
+        }
+        res.json({ success: true, weights: results });
+    });
+});
+
+
+// 체중 기록 추가 또는 업데이트 API
+app.post('/api/user/weights', (req, res) => {
+    const userId = req.session.userId; 
+    const { weight } = req.body;
+    const record_date = new Date().toISOString().split('T')[0];
+    if (!userId) {
+        return res.status(401).json({ success: false, message: '로그인 세션이 만료되었습니다.' });
+    }
+
+    const checkQuery = 'SELECT * FROM User_weight WHERE user_id = ?';
+    connection.query(checkQuery, [userId], (err, results) => {
+        if (err) {
+            console.error('체중 기록 확인 오류:', err);
+            return res.status(500).json({ success: false, message: '서버 오류' });
+        }
+
+        if (results.length > 0) {
+            // 이미 존재하는 경우 업데이트
+            const updateQuery = 'UPDATE User_weight SET weight = ? WHERE user_id = ? AND record_date = ?';
+            connection.query(updateQuery, [weight, userId, record_date], (err) => {
+                if (err) {
+                    console.error('체중 기록 업데이트 오류:', err);
+                    return res.status(500).json({ success: false, message: '서버 오류' });
+                }
+                return res.json({ success: true, message: '체중 기록이 업데이트되었습니다.' });
+            });
+        } else {
+            // 존재하지 않는 경우 새로 추가
+            const insertQuery = 'INSERT INTO User_weight (user_id, record_date, weight) VALUES (?, ?, ?)';
+            connection.query(insertQuery, [userId, record_date, weight], (err) => {
+                if (err) {
+                    console.error('체중 기록 추가 오류:', err);
+                    return res.status(500).json({ success: false, message: '서버 오류' });
+                }
+                return res.json({ success: true, message: '체중 기록이 추가되었습니다.' });
+            });
+        }
+    });
+});
+
+
 // 서버 시작
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
