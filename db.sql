@@ -83,6 +83,7 @@ CREATE TABLE Daily_calories (
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
+#select * from Follows ;
 /*
 use mysql;
 select host ,user from user;
@@ -102,7 +103,7 @@ INSERT INTO user_sign (id, user_id, pw, email, type) VALUES
 select * from users;
 select * from user_sign;
 SELECT * FROM User_sign WHERE id = 'a2' AND pw = 'a';
-
+users
 select * from feeds;
 SELECT * FROM Feed_menu;
 SELECT * FROM  Feed_comments ;
@@ -139,4 +140,7 @@ VALUES ('a1', NOW(), '저녁', '잘먹음', 'uploads/1729618528888.png', 'upload
 
 INSERT INTO Feed_menu (menu_id, feed_id, menu_name, menu_calorie)
 VALUES (3, 3, '피자', '1100');
+
+select * from Follows;
+select * from feeds;
 */

@@ -1,3 +1,4 @@
+/* Friends.module.css */
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0px;
@@ -5,7 +6,7 @@ body {
     box-sizing: border-box;
 }
 
-.page{
+.page {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -24,40 +25,43 @@ body {
     border: 2px solid lightgray;
 }
 
+.recommendationContainer {
+    width: 800px; /* 추천 목록의 너비를 친구 목록과 동일하게 설정 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 18px;
+    margin: 20px 0; /* 상하 여백 추가 */
+    border: 2px solid lightgray;
+}
+
 h4 {
     font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 800;
 }
 
-.friendList{
+.friendList {
     width: 100%;
     max-width: 600px;
     margin-top: 20px;
     margin-left: 20px;
 }
 
-.friendRecommendations{
+.friendRecommendations {
     width: 100%;
     max-width: 600px;
     margin-top: 20px;
     margin-left: 20px;
-}   
+}
 
-.friendRecommendations button{
-    color: #ffffff;
-    font-weight:normal;
-    width: 100px;
-    height: 28px;
-    border-radius: 10px;
-    border: none;
-    background-color: #90dd90;
-  }
-
-.friendItem {
+.friendItem,
+.recommendationItem {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    align-items: center; /* 수직 중앙 정렬 */
+    justify-content: space-between; /* 양쪽 끝 정렬 */
     width: 100%;
     max-width: 600px;
     padding: 10px;
@@ -67,38 +71,54 @@ h4 {
     background-color: #fafafa;
 }
 
-p{
+.friendInfo {
+    display: flex;
+    align-items: center; /* 프로필 사진과 이름 수직 정렬 */
+}
+
+.friendItem span,
+.recommendationItem span {
+    font-size: 16px;
+    margin-left: 0; /* 프로필 사진과 이름 사이의 간격 제거 */
+}
+
+.profileImage {
+    width: 40px; /* 프로필 사진 크기 */
+    height: 40px; /* 프로필 사진 크기 */
+    border-radius: 50%; /* 원형으로 만들기 */
+    background-color: lightgray; /* 기본 배경색 */
+    margin-right: 8px; /* 프로필 사진과 이름 사이의 간격 */
+}
+
+.friendRecommendations button,
+.friendItem button {
+    color: #ffffff;
+    font-weight: normal;
+    width: 100px;
+    height: 28px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer; /* 커서 스타일 추가 */
+}
+
+.friendRecommendations button {
+    background-color: #90dd90; /* 친구 추가 버튼 색상 */
+}
+
+.friendItem button {
+    background-color: #ff6b6b; /* 친구 삭제 버튼 색상 */
+}
+
+p {
     color: gray;
 }
 
-.recommendationItem{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    max-width: 600px;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #eee;
-    border-radius: 4px;
-    background-color: #fafafa;
-}
-
-.friendItem span span {
-    font-size: 16px;
-}
-
-.recommendationItem span{
-    font-size: 16px;
-}
-
-
-@media (max-width: 800px){
-    .page{
+@media (max-width: 800px) {
+    .page {
         margin-left: 0px;
         margin-bottom: 80px;
     }
-    .friendsContainer {
+    .friendsContainer, .recommendationContainer {
         width: 70vw;
         padding: 30px;
     }
